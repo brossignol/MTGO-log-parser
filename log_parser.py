@@ -2,21 +2,24 @@ import json
 
 
 def parse_line(line):
+    # parse string to json
     i = line.find('{')
     j = line[::-1].find('}')
     s = line[i:-j + 1]
     if s.count('{') > s.count('}'):
-        s += '}'  # sometime the last parenthesis is missing
+        s += '}'  # sometimes the last parenthesis is missing
     return json.JSONDecoder().decode(s)
 
 
 def get_player_map(e):
+    # get id to player map
     player_map = {p['LoginID']: p['PlayerName'] for p in e["Players"]}
     player_map[-99] = 'Bye'
     return player_map
 
 
 def get_standing_at_round(rd, player_map):
+    # get standings, (each round contain all the match results of all previous round)
     n = len(rd['Results'])  # n_player
     n_round = rd.get('Round', rd.get('Number'))
     df = {'Rank': [''] * n, 'Name': [''] * n, 'Wins': [''] * n, 'Losses': [''] * n}
