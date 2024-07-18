@@ -57,7 +57,7 @@ def parse_started_event(log):
             rounds = e["PremiereEventSyncData"]['TournamentSyncData']['Rounds']
             player_map = get_player_map(e)
 
-            challenge = {'name': e['Description'] + e['StartDate'][:13], 'player_map': player_map}
+            challenge = {'name': e['Description'] + '_' + e['StartDate'][:13], 'player_map': player_map}
             challenges[e['EventToken']] = challenge
 
             finished = [rd for rd in rounds if rd['Results']]
