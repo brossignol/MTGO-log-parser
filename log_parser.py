@@ -22,7 +22,7 @@ def get_standing_at_round(rd, player_map):
     # get standings, (each round contain all the match results of all previous round)
     n = len(rd['Results'])  # n_player
     n_round = rd.get('Round', rd.get('Number'))
-    df = {'Rank': [''] * n, 'Name': [''] * n, 'Wins': [''] * n, 'Losses': [''] * n}
+    df = {'Rank': [''] * n, 'Name': [''] * n, 'Wins': [0] * n, 'Losses': [0] * n, 'Bye': [''] * n}
 
     for i in range(1, n_round + 1):
         df[f'R{i}'] = [''] * n
@@ -33,8 +33,6 @@ def get_standing_at_round(rd, player_map):
         i = player['Rank'] - 1
         df['Rank'][i] = i + 1
         df['Name'][i] = player_map[player['LoginID']]
-        df['Wins'][i] = 0
-        df['Losses'][i] = 0
 
         for opponent in player['OpponentResults']:
             j = n_round - opponent['Round'] + 1
@@ -42,7 +40,10 @@ def get_standing_at_round(rd, player_map):
             df[f'R{j}w'][i] = opponent['Win']
             df[f'R{j}l'][i] = opponent['Loss']
 
-            if opponent['Bye'] or opponent['Win'] > opponent['Loss']:
+            if opponent['Bye']:
+                df['Bye'][i] = 1 + (df['Bye'][i] if isinstance(df['Bye'][i], int) else 0)
+                df['Wins'][i] += 1
+            elif opponent['Win'] > opponent['Loss']:
                 df['Wins'][i] += 1
             else:
                 df['Losses'][i] += 1

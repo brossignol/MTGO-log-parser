@@ -34,6 +34,6 @@ if __name__ == '__main__':
     mtgo_path = os.path.expanduser('~') + r'\AppData\Local\Apps\2.0'
     path_to_log = get_mtgo_log(mtgo_path)
     out_folder = 'data'
-    filters = ['Vintage']
+    filters = ['Vintage Challenge']
     os.makedirs(out_folder, exist_ok=True)
     main(path_to_log, out_folder, filters)
