@@ -13,10 +13,13 @@ def main(path, out_path, filters):
     for token, challenge in challenges.items():
         if not filters or any(f in challenge['name'] for f in filters):
             print(challenge['name'])
-            with open(os.path.join(out_path, challenge['name'] + '.csv'), 'w') as file:
+            path = os.path.join(out_path, challenge['name'] + '.csv').replace(' ', '_')
+            with open(path, 'w') as file:
                 df = challenge['standings']
                 for row in [df, *zip(*df.values())]:
                     file.write(','.join(map(str, row)) + '\n')
+
+            print(make_console_link(path))
 
 
 def get_mtgo_log(mtgo_path):
@@ -38,7 +41,6 @@ if __name__ == '__main__':
     mtgo_path = os.path.expanduser('~') + r'\AppData\Local\Apps\2.0'
     path_to_log = get_mtgo_log(mtgo_path)
     out_folder = 'data'
-    filters = ['Vintage Challenge']
-    print(make_console_link(out_folder))
+    filters = ['Vintage Challenge', 'Vintage Qualifier']
     os.makedirs(out_folder, exist_ok=True)
     main(path_to_log, out_folder, filters)
